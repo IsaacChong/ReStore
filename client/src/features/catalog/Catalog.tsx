@@ -1,36 +1,39 @@
-import {
-  Avatar,
-  Button,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
-} from "@mui/material";
+import { Button } from "@mui/material";
+import ProductList from "./ProductList";
 import { Product } from "../../app/models/product";
+import { useEffect, useState } from "react";
 
-interface Props {
-  products: Product[];
-  addProduct: () => void;
-}
+export default function Catalog() {
+  const [products, setProducts] = useState<Product[]>([]);
 
-export default function Catalog({ products, addProduct }: Props) {
+  useEffect(() => {
+    fetch("http://localhost:5022/api/Products")
+      .then((res) => res.json())
+      .then((data) => setProducts(data));
+  }, []);
+
+  // const addProduct = () => {
+  //   setProducts((prev) => {
+  //     return [
+  //       ...prev,
+  //       {
+  //         id: prev.length + 7,
+  //         name: prev[prev.length - 1].name + String(prev.length),
+  //         price: prev.length,
+  //         description: prev[prev.length - 1].description,
+  //         pictureUrl: "/client/public/images",
+  //         brand: "string",
+  //       },
+  //     ];
+  //   });
+  // };
+
   return (
     <>
-      <List>
-        {products.map((prd) => (
-          <ListItem key={prd.id}>
-            <ListItemAvatar>
-              <Avatar src={prd.pictureUrl} />
-            </ListItemAvatar>
-            <ListItemText>
-              <h3>{prd.name}</h3>
-              <p>Price: ${prd.price}</p>
-              <p>Description: {prd.description}</p>
-            </ListItemText>
-          </ListItem>
-        ))}
-      </List>
-      <Button variant="contained" onClick={addProduct}>Add product</Button>
+      <ProductList products={products} />
+      {/* <Button variant="contained" onClick={addProduct}>
+        Add product
+      </Button> */}
     </>
   );
 }
