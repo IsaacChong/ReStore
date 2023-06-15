@@ -1,6 +1,6 @@
-import { Typography } from "@mui/material";
 
-const frame = {width: '100%', height: '100%'}
+
+// const frame = {width: '100%', height: '100%'}
 const frameContainer = {
   height: "500px",
   marginTop: "3rem"
