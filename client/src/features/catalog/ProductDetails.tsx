@@ -1,6 +1,5 @@
 import {
   Box,
-  Container,
   Grid,
   Table,
   TableBody,
@@ -8,13 +7,11 @@ import {
   TableContainer,
   TableRow,
   Typography,
-  useMediaQuery,
-  useTheme,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Product } from "../../app/models/product";
-import axios from "axios";
+import agent from "../../app/api/agent";
 
 const layout = {
   display: "flex",
@@ -38,11 +35,8 @@ export default function ProductDetails() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:5022/api/products/${id}`)
-      .then((res) => {
-        return setProduct(res.data);
-      })
+    id && agent.Catalog.details(parseInt(id))
+      .then((data) => setProduct(data))
       .catch(function (error) {
         return console.log(error);
       })
@@ -61,13 +55,13 @@ export default function ProductDetails() {
     <Grid container sx={layout}>
       <Grid sm={6}>
         <Box sx={imgBox}>
-          <img src={product.pictureUrl}></img>
+          <img alt={product.name} src={product.pictureUrl}></img>
         </Box>
       </Grid>
       <Grid sm={6}>
         <Typography variant="h3">{product.name}</Typography>
         <hr></hr>
-        <Typography variant="h4" sx={{color: 'secondary.main'}}>
+        <Typography variant="h4" sx={{ color: "secondary.main" }}>
           ${(product.price / 100).toFixed(2)}
         </Typography>
         <hr></hr>
