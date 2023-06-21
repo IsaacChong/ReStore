@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import {useNavigate, useParams } from "react-router-dom";
 import { Product } from "../../app/models/product";
 import agent from "../../app/api/agent";
 
@@ -33,15 +33,21 @@ export default function ProductDetails() {
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    id && agent.Catalog.details(parseInt(id))
-      .then((data) => setProduct(data))
-      .catch(function (error) {
-        return console.log(error);
-      })
-      .finally(() => setLoading(false));
-  }, [id]);
+    id &&
+      agent.Catalog.details(parseInt(id))
+        .then((data) => setProduct(data))
+        .catch(function (error) {
+          if (error.response.status === 404) {
+            navigate("not-found");
+          } else {
+            return console.log(error.response.status);
+          }
+        })
+        .finally(() => setLoading(false));
+  }, [id, navigate]);
 
   if (loading) {
     return <h3>Loading...</h3>;

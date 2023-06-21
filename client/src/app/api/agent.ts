@@ -1,8 +1,41 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
+import { toast } from "react-toastify";
+import { router } from "../router/Routes";
 
 axios.defaults.baseURL = "http://localhost:5022/api/";
 
 const responseBody = (response: AxiosResponse) => response.data;
+
+axios.interceptors.response.use(response => response, (error: AxiosError) => {
+    const { data, status } = error.response as AxiosResponse;
+    switch (status) {
+        case (400):
+            if (data.errors) {
+                const modalStateErrors = [];
+                for (const key in data.errors) {
+                    if (data.errors[key]) {
+                        modalStateErrors.push(data.errors[key])
+                    }
+                }
+                throw modalStateErrors.flat();
+            }
+            toast.error(data.title);
+            break
+        case (401):
+            toast.error(data.title);
+            break
+        case (404):
+            toast.error(data.title);
+            break
+        case (500):
+            router.navigate('/server-error', {state: {error: data}})
+            toast.error(data.title);
+            break
+        default:
+            break
+    }
+    return Promise.reject(error);
+});
 
 const requests = {
     get: (url: string) => axios.get(url).then(responseBody),
