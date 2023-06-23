@@ -6,7 +6,12 @@ axios.defaults.baseURL = "http://localhost:5022/api/";
 
 const responseBody = (response: AxiosResponse) => response.data;
 
-axios.interceptors.response.use(response => response, (error: AxiosError) => {
+const sleep = () => new Promise(resolve => setTimeout(resolve, 500));
+
+axios.interceptors.response.use(async response => {
+    await sleep();
+    return response;
+}, (error: AxiosError) => {
     const { data, status } = error.response as AxiosResponse;
     switch (status) {
         case (400):
@@ -28,7 +33,7 @@ axios.interceptors.response.use(response => response, (error: AxiosError) => {
             toast.error(data.title);
             break
         case (500):
-            router.navigate('/server-error', {state: {error: data}})
+            router.navigate('/server-error', { state: { error: data } })
             toast.error(data.title);
             break
         default:

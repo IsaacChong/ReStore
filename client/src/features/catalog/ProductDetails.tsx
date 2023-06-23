@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import {useNavigate, useParams } from "react-router-dom";
 import { Product } from "../../app/models/product";
 import agent from "../../app/api/agent";
+import LoadingComponent from "../../app/layout/LoadingComponent";
 
 const layout = {
   display: "flex",
@@ -50,7 +51,7 @@ export default function ProductDetails() {
   }, [id, navigate]);
 
   if (loading) {
-    return <h3>Loading...</h3>;
+    return <LoadingComponent message="Loading product..."/>
   }
 
   if (!product) {
