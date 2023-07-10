@@ -91,8 +91,8 @@ export default function Header({ switchTheme, darkMode }: Props) {
           </List>
         </Box>
         <Box sx={navBox}>
-          <IconButton color="inherit" aria-label="add to shopping cart">
-            <Badge badgeContent={4} style={{ color: "inherit" }}>
+          <IconButton color="inherit" aria-label="add to shopping cart" component={NavLink} to="/basket">
+            <Badge badgeContent={3} style={{ color: "inherit" }}>
               <AddShoppingCart />
             </Badge>
           </IconButton>

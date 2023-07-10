@@ -9,3 +9,5 @@ https://nlbsg.udemy.com/course/learn-to-build-an-e-commerce-store-with-dotnet-re
 16/6: Lesson 50
 21/6: Lesson 56
 23/6: Lesson 59
+4/7: Lesson 65
+10/7: Lesson 72
